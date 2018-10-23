@@ -1,4 +1,4 @@
-###Pure JS with Webpack
+### Pure JS with Webpack
 
 Made this for people who just want a pure javascript coding experience. 
 
