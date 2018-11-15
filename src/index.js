@@ -1,4 +1,4 @@
-import '../css/style.scss';
+/*import '../css/style.scss';
 import MakeElement from './Tools/MakeElement.js';
 
 
@@ -19,4 +19,35 @@ function RenderSite(){
   body.append(bodyContainer);
 }
 
-RenderSite(); 
+RenderSite(); */
+
+import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
+import SynthView from './Components/Synth/SynthView.js';
+
+const targetBodyElement = document.querySelector('#root');
+
+
+
+class App extends Component {
+  constructor() {
+    super();
+  }
+
+  render() {
+
+
+    return (
+        <div className='appContainer divContainer'>
+          sup
+
+          <SynthView />
+
+        </div>  
+
+      )
+  }
+}
+
+
+ReactDOM.render(<App />, targetBodyElement);
