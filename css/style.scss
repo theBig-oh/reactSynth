@@ -1,0 +1,12 @@
+@import './Components/index.scss';
+@import './settings.scss';
+
+
+.appContainer {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+} 

@@ -1,0 +1,103 @@
+@import '../settings.scss';
+
+.synthView {
+  border: 1px none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 70%;
+  width: 80%;
+  background: $synthBlack;
+  > div {
+    width: 100%;
+    display: flex;
+  }
+
+  .synthConsole {
+    border: 5px none;
+    height: 50%;
+    flex-direction: row;
+    flex-wrap: no-wrap;
+
+
+    > div {
+      height: 100%;
+      border: 1px none;
+
+    }
+
+    .speakerArray {
+      width: 20%;
+      > div {
+        height: 50%;
+        .speakerFan {
+          height: calc(100% / 6);
+          &:first-child {
+          
+                    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+20,000000+99&0+0,1+19,0+74 */
+          background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 19%, rgba(0,0,0,0.98) 20%, rgba(0,0,0,0) 74%, rgba(0,0,0,0) 99%); /* FF3.6-15 */
+          background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,1) 19%,rgba(0,0,0,0.98) 20%,rgba(0,0,0,0) 74%,rgba(0,0,0,0) 99%); /* Chrome10-25,Safari5.1-6 */
+          background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,1) 19%,rgba(0,0,0,0.98) 20%,rgba(0,0,0,0) 74%,rgba(0,0,0,0) 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+          
+          }
+          
+          &:not(:first-child) {
+        
+        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+1,000000+99&1+2,0+74 */
+        background: -moz-linear-gradient(top, rgba(0,0,0,1) 1%, rgba(0,0,0,1) 2%, rgba(0,0,0,0) 74%, rgba(0,0,0,0) 99%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, rgba(0,0,0,1) 1%,rgba(0,0,0,1) 2%,rgba(0,0,0,0) 74%,rgba(0,0,0,0) 99%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, rgba(0,0,0,1) 1%,rgba(0,0,0,1) 2%,rgba(0,0,0,0) 74%,rgba(0,0,0,0) 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+          }        
+        }        
+      }      
+
+    .topSpeakerPart {
+      padding-bottom: 10px;
+      padding-top: 4%;
+    }
+    .bottomSpeakerPart {
+      padding-top: 10px;
+    }
+    .rightSpeaker {
+      padding-right: 8%;
+    }
+    .leftSpeaker {
+      padding-left: 8%;
+    }
+    }
+    .consoleControls {
+      width: 60%;
+    }
+
+  }
+  .synthKeys {
+    height: 40%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-left: 5px;
+    overflow: hidden; 
+    > div {
+      height: 50%;
+      width: 79.5%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: no-wrap;
+      position: absolute;
+
+    }
+
+    .whiteKeyRow {
+      height: 31%;
+
+      overflow:hidden;
+
+    }
+    .blackKeyRow {
+      height: 40%;
+
+    }
+
+  }
+}

@@ -20,7 +20,7 @@ function RenderSite(){
 }
 
 RenderSite(); */
-
+import '../css/style.scss';
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import SynthView from './Components/Synth/SynthView.js';
