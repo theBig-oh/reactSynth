@@ -19,7 +19,8 @@ const octKeycode = [89,55,85,56,73,79,48,80,189,219,187,221];
 
 const eventKeys = [
                     ['z','s','x','d','c','v','g','b','h','n','j','m'],
-                    ['y','7','u','8','i','o','0','p','-','[','=',']']
+                    ['y','7','u','8','i','o','0','p','-','[','=',']'],
+                    ['_','{','+','}'], // 
                   ];
 
 
@@ -62,14 +63,17 @@ const notes = [  {'tone':261,'rootNote':'c','kCode':[eventKeys[0][0],eventKeys[1
                  {'tone':349,'rootNote':'f','kCode':[eventKeys[0][5],eventKeys[1][5]],'eventIndex':[5,17,29,41]},   // 5 
                  {'tone':369,'rootNote':'f#','kCode':[eventKeys[0][6],eventKeys[1][6]],'eventIndex':[6,18,30,42]}, // 6
                  {'tone':392,'rootNote':'g','kCode':[eventKeys[0][7],eventKeys[1][7]],'eventIndex':[7,19,31,43]},   // 7
-                 {'tone':415,'rootNote':'g#','kCode':[eventKeys[0][8],eventKeys[1][8]],'eventIndex':[8,20,32,44]}, // 8
-                 {'tone':440,'rootNote':'a','kCode':[eventKeys[0][9],eventKeys[1][9]],'eventIndex':[9,21,33,45]},   // 9
-                 {'tone':466,'rootNote':'a#','kCode':[eventKeys[0][10],eventKeys[1][10]],'eventIndex':[10,22,34,46]}, //10 
-                 {'tone':493,'rootNote':'b','kCode':[eventKeys[0][11],eventKeys[1][11]],'eventIndex':[11,23,35,47]}];  //11
+                 {'tone':415,'rootNote':'g#','kCode':[eventKeys[0][8],eventKeys[1][8], eventKeys[2][0]],'eventIndex':[8,20,32,44]}, // 8
+                 {'tone':440,'rootNote':'a','kCode':[eventKeys[0][9],eventKeys[1][9], eventKeys[2][1]],'eventIndex':[9,21,33,45]},   // 9
+                 {'tone':466,'rootNote':'a#','kCode':[eventKeys[0][10],eventKeys[1][10], eventKeys[2][2]],'eventIndex':[10,22,34,46]}, //10 
+                 {'tone':493,'rootNote':'b','kCode':[eventKeys[0][11],eventKeys[1][11], eventKeys[2][3]],'eventIndex':[11,23,35,47]}];  //11
 
 function PianoKey(props, keyNum, keyType, noteName) {
   return <div className={`pianoKeys ${props.keyType} key_${props.keyNum}`}> {props.note} </div>
 }
+
+
+
 
 
 export default class SynthView extends Component {
@@ -78,6 +82,7 @@ export default class SynthView extends Component {
     this.state = { 
       numberOfKeys: Array(48).fill(null),
       waveType: ['sine','square','triangle','sawtooth'],
+      volume: 0.5,
       pianoKeys: [],
       activeSynth: [],
     }
@@ -120,24 +125,31 @@ export default class SynthView extends Component {
             if(shifted) {
               notePosition = note.eventIndex[0];
               document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(1, now)
+              synth[notePosition].start(this.state.volume, now)
             } else {
               notePosition = note.eventIndex[1];
               document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(1, now)
+              synth[notePosition].start(this.state.volume, now)
             }
             break;
           case note.kCode[1] :
             if(shifted) {
               notePosition = note.eventIndex[3];
               document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(1, now)
+              synth[notePosition].start(this.state.volume, now)
             } else {
               notePosition = note.eventIndex[2];
               document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(1, now)
+              synth[notePosition].start(this.state.volume, now)
             }
-            break;            
+            break;  
+          case note.kCode[2] :
+            if(shifted) {
+              notePosition = note.eventIndex[3];
+              document.querySelector('.key_'+notePosition).classList.add('activeKey');
+              synth[notePosition].start(this.state.volume, now)
+            } 
+            break;                       
         }
       })
     })
@@ -164,20 +176,27 @@ export default class SynthView extends Component {
             } else {
               notePosition = note.eventIndex[1];
               document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].start(0, now)
+              synth[notePosition].stop(0, now)
             }
             break;
           case note.kCode[1] :
             if(shifted) {
               notePosition = note.eventIndex[3];
               document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].start(0, now)
+              synth[notePosition].stop(0, now)
             } else {
               notePosition = note.eventIndex[2];
               document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].start(0, now)
+              synth[notePosition].stop(0, now)
             }
-            break;            
+            break;  
+          case note.kCode[2] :
+            if(shifted) {
+              notePosition = note.eventIndex[3];
+              document.querySelector('.key_'+notePosition).classList.remove('activeKey');
+              synth[notePosition].stop(1, now)
+            } 
+            break;                       
         }
       })
     })
@@ -192,6 +211,15 @@ export default class SynthView extends Component {
     this.soundOn();
     this.soundOff();
   }
+
+  changeVol(volVal) {
+    const newVol = volVal / 100;
+
+    this.setState({
+      volume: newVol
+    })
+  }
+
   render() {
     let blackKeys = [];
     let whiteKeys = [];
@@ -259,7 +287,9 @@ export default class SynthView extends Component {
            </div>
             <div className='consoleControls'>
               <div className='leftSide consolePart'>
-
+                <div className='volume_control'>
+                  <input type='range'className='vol_slide' max={100} min={0} onChange={(e)=>{this.changeVol(e.target.value)}}/> 
+                </div>
               </div>
               <div className='midSide consolePart'>
                   <div className='consoleDisplay standIn'> </div>

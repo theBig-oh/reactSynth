@@ -26,6 +26,9 @@
 
     }
 
+
+
+
     .speakerArray {
       width: 20%;
       > div {
@@ -69,6 +72,34 @@
     }
     .consoleControls {
       width: 60%;
+      display: flex;
+      justify-content: center;
+      > div {
+        border: 1px solid black;
+        display: flex;
+      }
+      .leftSide, .rightSide {
+        width: 20%;
+      }
+
+      .leftSide {
+        justify-content: center;
+        .volume_control {
+          border: 1px none;
+          border-radius: 10px;
+          width: 80%; 
+          height: 7%;
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f7f7f7+0,db5557+100&0+42,1+99 */
+background: -moz-linear-gradient(left, rgba(247,247,247,0) 0%, rgba(235,179,180,0) 42%, rgba(219,87,89,1) 99%, rgba(219,85,87,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left, rgba(247,247,247,0) 0%,rgba(235,179,180,0) 42%,rgba(219,87,89,1) 99%,rgba(219,85,87,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right, rgba(247,247,247,0) 0%,rgba(235,179,180,0) 42%,rgba(219,87,89,1) 99%,rgba(219,85,87,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00f7f7f7', endColorstr='#db5557',GradientType=1 ); /* IE6-9 */
+
+        }
+      }
+      .midSide {
+        width: 60%;
+      }
     }
 
   }
