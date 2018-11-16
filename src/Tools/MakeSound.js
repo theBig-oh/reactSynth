@@ -2,7 +2,7 @@ import context from './audioContext.js';
 
 export default class MakeSound {
   constructor(context, frequency, waveType, detune) {
-    this.oscillator = context.createOscillator();
+/*    this.oscillator = context.createOscillator();
     this.gainNode = context.createGain();
     this.volume = this.gainNode.gain;
     this.oscillator.type = waveType;
@@ -11,15 +11,56 @@ export default class MakeSound {
     console.log(this);
     this.oscillator.connect(this.gainNode);
     this.gainNode.connect(context.destination);
+*/
+    this.overtoneCount = Array(12).fill(null);
+    this.oscBank = {};
 
-    this.oscillator.start(0);
+    const centValues = [0,2,-14]; // Major overtones 
+    this.overtoneCount.map((osci,i) => {
+      if(!this.oscBank[i]) {
+       /* this.oscBank[i].osci = context.createOscillator();
+        this.oscBank[i].gain = context.createGain();
+       */ 
+       const self = this;
+       this.oscBank[i] = {
+        "osci": context.createOscillator(),
+        "gain": context.createGain(),
+       }
+
+       this.oscBank[i].osci.frequency.value = frequency;
+       this.oscBank[i].osci.detune.value = centValues[i%centValues.length];
+       this.oscBank[i].gain.gain.value = 0;
+       this.oscBank[i].osci.connect(this.oscBank[i].gain);
+       this.oscBank[i].gain.connect(context.destination);
+
+        this.oscBank[i].osci.start(0);
+
+      }
+
+    })
+
+
   } 
 
   start(volSet, time) {
-    this.volume.value = volSet;
+    console.log(this.oscBank);
+    const tones = this.overtoneCount;
+    const volRatio = [1,0.5,0.33,0.25,0.10]
+    tones.map((oscii,i) => {
+      this.oscBank[i].gain.gain.value = (volSet * volRatio[i]).toFixed(tones.length);
+
+    })
+/*    this.volume.value = volSet;
+*/
   }
   stop(volSet, time) {
-    this.volume.value = volSet;
+    console.log(this.oscBank);
+    const tones = this.overtoneCount;
+    const volRatio = [1,0.5,0.33,0.25,0.10]
+    tones.map((oscii,i) => {
+      this.oscBank[i].gain.gain.value = 0;
+
+    })
   }
   disconnect() {
     this.oscillator.disconnect();

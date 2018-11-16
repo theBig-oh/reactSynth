@@ -77,7 +77,7 @@ export default class SynthView extends Component {
     super() 
     this.state = { 
       numberOfKeys: Array(48).fill(null),
-      waveType: 'sine',
+      waveType: ['sine','square','triangle','sawtooth'],
       pianoKeys: [],
       activeSynth: [],
     }
@@ -86,13 +86,12 @@ export default class SynthView extends Component {
 
   initializeOscill() {
     const keyCount = this.state.numberOfKeys;
-    const waveType = this.state.waveType;
+    const waveType = this.state.waveType[0];
     let synthArray = []; 
 
       for(let x=0; x<keyCount.length; x++) {
         let octaveNum = x%12;
-        console.log(x);
-        console.log('sup');
+
         synthArray.push(Synth(x,octaveNum, waveType));
           
       }
@@ -301,13 +300,12 @@ export default class SynthView extends Component {
               {
                 this.state.pianoKeys.map((pK,i)=> {
                   let octaveNum = i%12;
-                  console.log(octaveNum);
+             
 
                   if(!blackKeyOrder.includes(octaveNum)) {
                     return pK
-                  } else {
-                    console.log('this is a white key');
-                  }
+                  } 
+                  
                 })
 
 
