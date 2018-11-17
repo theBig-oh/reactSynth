@@ -20,13 +20,9 @@ export default class MakeSound {
     this.overtoneCount = Array(12).fill(null);
     this.oscBank = {};
 
-    const centValues = [0,2,-14]; // Major overtones 
+    const centValues = [0,2,-14,14]; // Major overtones 
     this.overtoneCount.map((osci,i) => {
       if(!this.oscBank[i]) {
-       /* this.oscBank[i].osci = context.createOscillator();
-        this.oscBank[i].gain = context.createGain();
-       */ 
-       const self = this;
        this.oscBank[i] = {
         "osci": context.createOscillator(),
         "gain": context.createGain(),
@@ -37,8 +33,7 @@ export default class MakeSound {
        this.oscBank[i].gain.gain.value = 0;
        this.oscBank[i].osci.connect(this.oscBank[i].gain);
        this.oscBank[i].gain.connect(context.destination);
-
-        this.oscBank[i].osci.start(0);
+       this.oscBank[i].osci.start(0);
 
       }
 
@@ -61,7 +56,6 @@ export default class MakeSound {
   stop(volSet, time) {
     console.log(this.oscBank);
     const tones = this.overtoneCount;
-    const volRatio = [1,0.5,0.33,0.25,0.10]
     tones.map((oscii,i) => {
       this.oscBank[i].gain.gain.value = 0;
 
