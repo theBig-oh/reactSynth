@@ -28,9 +28,14 @@ export default class MakeSound {
         "gain": context.createGain(),
        }
 
+       /*
+          Some functions act funky when written as above. 
+      
+       */
+
        this.oscBank[i].osci.frequency.value = frequency;
        this.oscBank[i].osci.detune.value = centValues[i%centValues.length];
-       this.oscBank[i].gain.gain.value = 0;
+       this.oscBank[i].gain.gain.setValueAtTime(0, 0);
        this.oscBank[i].osci.connect(this.oscBank[i].gain);
        this.oscBank[i].gain.connect(context.destination);
        this.oscBank[i].osci.start(0);
@@ -42,22 +47,33 @@ export default class MakeSound {
 
   } 
 
-  start(volSet, time) {
+
+  /*
+
+      Notes for myself: 
+
+      - Triangle wave type with current centValues makes it sound like an accordion.
+      - Still need a way to implement decay values into start().
+
+  */
+
+
+  start(volSet, time, atkVal, waveType) {
     console.log(this.oscBank);
     const tones = this.overtoneCount;
+    const volRatio = [1,0.5,0.33,0.25,0.10];
+    tones.map((oscii,i) => {
+      this.oscBank[i].gain.gain.linearRampToValueAtTime((volSet * volRatio[i]).toFixed(tones.length + 1), time + atkVal);
+      this.oscBank[i].osci.type = Array.isArray(waveType) ? waveType[i%waveType.length] : waveType; // Implementation of this will be done later
+    })
+  }
+  stop(volSet, time, releaseVal) {
+    console.log(this.oscBank);
+    const tones = this.overtoneCount;
+
     const volRatio = [1,0.5,0.33,0.25,0.10]
     tones.map((oscii,i) => {
-      this.oscBank[i].gain.gain.value = (volSet * volRatio[i]).toFixed(tones.length);
-
-    })
-/*    this.volume.value = volSet;
-*/
-  }
-  stop(volSet, time) {
-    console.log(this.oscBank);
-    const tones = this.overtoneCount;
-    tones.map((oscii,i) => {
-      this.oscBank[i].gain.gain.value = 0;
+      this.oscBank[i].gain.gain.linearRampToValueAtTime(0, time + releaseVal);
 
     })
   }

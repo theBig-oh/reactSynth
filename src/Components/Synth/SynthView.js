@@ -68,12 +68,18 @@ const notes = [  {'tone':261,'rootNote':'c','kCode':[eventKeys[0][0],eventKeys[1
                  {'tone':466,'rootNote':'a#','kCode':[eventKeys[0][10],eventKeys[1][10], eventKeys[2][2]],'eventIndex':[10,22,34,46]}, //10 
                  {'tone':493,'rootNote':'b','kCode':[eventKeys[0][11],eventKeys[1][11], eventKeys[2][3]],'eventIndex':[11,23,35,47]}];  //11
 
+
+/*   Deals with the piano Keys */
 function PianoKey(props, keyNum, keyType, noteName) {
   return <div className={`pianoKeys ${props.keyType} key_${props.keyNum}`}> {props.note} </div>
 }
 
-
-
+/*
+  Wave selector, pure function
+*/
+function WaveTypeDisplay(props) {
+  return <div className={`waveChoice ${props.waveNum} ${props.waveName} ${props.selectWave}`} onClick={()=> {props.changeWav(props.waveNum)}}> {props.waveName} </div>
+}
 
 
 export default class SynthView extends Component {
@@ -82,10 +88,19 @@ export default class SynthView extends Component {
     this.state = { 
       numberOfKeys: Array(48).fill(null),
       waveType: ['sine','square','triangle','sawtooth'],
+      currentWave: 1,
       volume: 0.5,
       pianoKeys: [],
       activeSynth: [],
+      adsr: [
+            0.01, // Attack
+            0.1, // Decay
+            1,   // Sustain
+            0.5  // Release
+            ],
     }
+
+    this.changeWave = this.changeWave.bind(this);
 
   }
 
@@ -106,101 +121,62 @@ export default class SynthView extends Component {
 
   
   }
-  soundOn() {
-    document.querySelector('body').addEventListener('keydown', (event) => {
+
+
+  soundGen(eType) {
+    let eventList = eType ? 'keydown' : 'keyup';
+
+    document.querySelector('body').addEventListener(eventList, (event) => {
       if(!event.metaKey) {
         event.preventDefault();
       }
       let synth = this.state.activeSynth;
-      let shifted =event.shiftKey; 
+      let shifted = event.shiftKey; 
       let eKey = event.key.toString().toLowerCase();
-      let now = context.currentTime; 
-
+      let now = context.currentTime;
+      let moveType = eType ? 'add' : 'remove';
+      let playType = eType ? 'start' : 'stop';
       notes.forEach((note,i) => {
-        let notePosition = 12; // Default will be middle C. 
-        let midOvertone, lowerOvertone = null; // Debating to use this or not
+        let notePosition = 12; // - Points to middle C on the keyboard aka unshifted Z
 
         switch(eKey) {
           case note.kCode[0] :
             if(shifted) {
               notePosition = note.eventIndex[0];
-              document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now)
+              document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[this.state.currentWave]);
             } else {
               notePosition = note.eventIndex[1];
-              document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now)
+              document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[this.state.currentWave]);
             }
-            break;
-          case note.kCode[1] :
-            if(shifted) {
-              notePosition = note.eventIndex[3];
-              document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now)
-            } else {
-              notePosition = note.eventIndex[2];
-              document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now)
-            }
-            break;  
-          case note.kCode[2] :
-            if(shifted) {
-              notePosition = note.eventIndex[3];
-              document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now)
-            } 
-            break;                       
-        }
-      })
-    })
-  }
-  soundOff() {
-    document.querySelector('body').addEventListener('keyup', (event) => {
-      if(!event.metaKey) {
-        event.preventDefault();
-      }
-      let synth = this.state.activeSynth;
-      let shifted =event.shiftKey; 
-      let eKey = event.key.toString().toLowerCase();
-      let now = context.currentTime; 
-      notes.forEach((note,i) => {
-        let notePosition = 12; // Default will be middle C. 
-        let midOvertone, lowerOvertone = null;
+          break;
 
-        switch(eKey) {
-          case note.kCode[0] :
-            if(shifted) {
-              notePosition = note.eventIndex[0];
-              document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(0, now)
-            } else {
-              notePosition = note.eventIndex[1];
-              document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(0, now)
-            }
-            break;
           case note.kCode[1] :
             if(shifted) {
               notePosition = note.eventIndex[3];
-              document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(0, now)
+              document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[this.state.currentWave]);
             } else {
               notePosition = note.eventIndex[2];
-              document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(0, now)
+              document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[this.state.currentWave]);
             }
-            break;  
+          break;
           case note.kCode[2] :
             if(shifted) {
               notePosition = note.eventIndex[3];
-              document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(1, now)
+              document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[this.state.currentWave]);
             } 
-            break;                       
         }
       })
     })
+
+
   }
+
+
 
 
   componentWillMount() {
@@ -208,8 +184,9 @@ export default class SynthView extends Component {
 
   }
   componentDidMount() {
-    this.soundOn();
-    this.soundOff();
+
+    this.soundGen(true);
+    this.soundGen(false);
   }
 
   changeVol(volVal) {
@@ -219,7 +196,11 @@ export default class SynthView extends Component {
       volume: newVol
     })
   }
-
+  changeWave(waveVal) {
+    this.setState({
+      currentWave: waveVal
+    })
+  }
   render() {
     let blackKeys = [];
     let whiteKeys = [];
@@ -265,7 +246,7 @@ export default class SynthView extends Component {
              {
               numOfFans.map((key,i)=>{
                 return (
-                    <div className={`speakerFan fan_${i}`}></div>
+                    <div key={`leftTopSpeaker_`+i}className={`speakerFan fan_${i}`}></div>
 
                   )
               })
@@ -276,7 +257,7 @@ export default class SynthView extends Component {
              {
               numOfFans.map((key,i)=>{
                 return (
-                    <div className={`speakerFan fan_${i}`}></div>
+                    <div key={`leftBtmSpeaker_`+i}className={`speakerFan fan_${i}`}></div>
 
                   )
               })
@@ -289,6 +270,19 @@ export default class SynthView extends Component {
               <div className='leftSide consolePart'>
                 <div className='volume_control'>
                   <input type='range'className='vol_slide' max={100} min={0} onChange={(e)=>{this.changeVol(e.target.value)}}/> 
+                </div>
+                <div className='wave_selector'> 
+                  {
+                    this.state.waveType.map((wave, i) => {
+                      let selectedType = 'notSelect';
+                      if(i == this.state.currentWave) {
+                        selectedType = 'selectWave';
+                      }
+                      return <WaveTypeDisplay key={`waveTypeDisplay_${i}`} selectWave={selectedType} waveNum={i} waveName={wave} changeWav={this.changeWave}/>
+
+                    })
+                  }
+
                 </div>
               </div>
               <div className='midSide consolePart'>
@@ -304,7 +298,7 @@ export default class SynthView extends Component {
              {
               numOfFans.map((key,i)=>{
                 return (
-                    <div className={`speakerFan fan_${i}`}></div>
+                    <div key={`rightTopSpeaker_`+i}className={`speakerFan fan_${i}`}></div>
 
                   )
               })
@@ -315,7 +309,7 @@ export default class SynthView extends Component {
              {
               numOfFans.map((key,i)=>{
                 return (
-                    <div className={`speakerFan fan_${i}`}></div>
+                    <div key={`rightBtmSpeaker_`+i} className={`speakerFan fan_${i}`}></div>
 
                   )
               })
