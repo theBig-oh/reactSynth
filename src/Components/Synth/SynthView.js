@@ -85,6 +85,12 @@ export default class SynthView extends Component {
       volume: 0.5,
       pianoKeys: [],
       activeSynth: [],
+      adsr: [
+            0.5, // Attack
+            0.1, // Decay
+            1,   // Sustain
+            0.5  // Release
+            ],
     }
 
   }
@@ -120,34 +126,41 @@ export default class SynthView extends Component {
         let notePosition = 12; // Default will be middle C. 
         let midOvertone, lowerOvertone = null; // Debating to use this or not
 
+
+        /*
+          This can probably be
+        
+        */
+
+
         switch(eKey) {
           case note.kCode[0] :
             if(shifted) {
               notePosition = note.eventIndex[0];
               document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now)
+              synth[notePosition].start(this.state.volume, now, this.state.adsr[1])
             } else {
               notePosition = note.eventIndex[1];
               document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now)
+              synth[notePosition].start(this.state.volume, now, this.state.adsr[1])
             }
             break;
           case note.kCode[1] :
             if(shifted) {
               notePosition = note.eventIndex[3];
               document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now)
+              synth[notePosition].start(this.state.volume, now, this.state.adsr[1])
             } else {
               notePosition = note.eventIndex[2];
               document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now)
+              synth[notePosition].start(this.state.volume, now, this.state.adsr[1])
             }
             break;  
           case note.kCode[2] :
             if(shifted) {
               notePosition = note.eventIndex[3];
               document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now)
+              synth[notePosition].start(this.state.volume, now, this.state.adsr[1])
             } 
             break;                       
         }
@@ -172,29 +185,29 @@ export default class SynthView extends Component {
             if(shifted) {
               notePosition = note.eventIndex[0];
               document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(0, now)
+              synth[notePosition].stop(0, now, this.state.adsr[3]);
             } else {
               notePosition = note.eventIndex[1];
               document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(0, now)
+              synth[notePosition].stop(0, now, this.state.adsr[3]);
             }
             break;
           case note.kCode[1] :
             if(shifted) {
               notePosition = note.eventIndex[3];
               document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(0, now)
+              synth[notePosition].stop(0, now, this.state.adsr[3]);
             } else {
               notePosition = note.eventIndex[2];
               document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(0, now)
+              synth[notePosition].stop(0, now, this.state.adsr[3]);
             }
             break;  
           case note.kCode[2] :
             if(shifted) {
               notePosition = note.eventIndex[3];
               document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(1, now)
+              synth[notePosition].stop(0, now, this.state.adsr[3]);
             } 
             break;                       
         }

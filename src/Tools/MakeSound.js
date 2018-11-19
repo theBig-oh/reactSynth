@@ -30,7 +30,7 @@ export default class MakeSound {
 
        this.oscBank[i].osci.frequency.value = frequency;
        this.oscBank[i].osci.detune.value = centValues[i%centValues.length];
-       this.oscBank[i].gain.gain.value = 0;
+       this.oscBank[i].gain.gain.setValueAtTime(0, 0);
        this.oscBank[i].osci.connect(this.oscBank[i].gain);
        this.oscBank[i].gain.connect(context.destination);
        this.oscBank[i].osci.start(0);
@@ -42,22 +42,22 @@ export default class MakeSound {
 
   } 
 
-  start(volSet, time) {
+  start(volSet, time, atkVal, decayVal) {
     console.log(this.oscBank);
     const tones = this.overtoneCount;
+    const volRatio = [1,0.5,0.33,0.25,0.10];
+    tones.map((oscii,i) => {
+      this.oscBank[i].gain.gain.linearRampToValueAtTime((volSet * volRatio[i]).toFixed(tones.length + 1), time + atkVal);
+      this.oscBank[i].osci.type = 'triangle';
+    })
+  }
+  stop(volSet, time, decayVal) {
+    console.log(this.oscBank);
+    const tones = this.overtoneCount;
+
     const volRatio = [1,0.5,0.33,0.25,0.10]
     tones.map((oscii,i) => {
-      this.oscBank[i].gain.gain.value = (volSet * volRatio[i]).toFixed(tones.length);
-
-    })
-/*    this.volume.value = volSet;
-*/
-  }
-  stop(volSet, time) {
-    console.log(this.oscBank);
-    const tones = this.overtoneCount;
-    tones.map((oscii,i) => {
-      this.oscBank[i].gain.gain.value = 0;
+      this.oscBank[i].gain.gain.linearRampToValueAtTime((volSet * volRatio[i]).toFixed(tones.length + 1), time + decayVal);
 
     })
   }
