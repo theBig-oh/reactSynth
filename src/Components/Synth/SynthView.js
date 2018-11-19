@@ -92,11 +92,12 @@ export default class SynthView extends Component {
       volume: 0.5,
       pianoKeys: [],
       activeSynth: [],
+      decaySynth: [],
       adsr: [
-            0.01, // Attack
-            0.1, // Decay
-            1,   // Sustain
-            0.5  // Release
+            0.1, // Attack
+            0.5, // Decay
+            0.2,   // Sustain
+            0.75,  // Release
             ],
     }
 
@@ -117,6 +118,7 @@ export default class SynthView extends Component {
       }
       this.setState({
         activeSynth: synthArray,
+        decaySynth: synthArray,
       })
 
   
@@ -130,12 +132,22 @@ export default class SynthView extends Component {
       if(!event.metaKey) {
         event.preventDefault();
       }
-      let synth = this.state.activeSynth;
-      let shifted = event.shiftKey; 
-      let eKey = event.key.toString().toLowerCase();
-      let now = context.currentTime;
-      let moveType = eType ? 'add' : 'remove';
-      let playType = eType ? 'start' : 'stop';
+      let synth = this.state.activeSynth,
+       decaySynth = this.state.decaySynth,
+       masterVol = this.state.volume,
+       adsrAttack = this.state.adsr[0],
+       adsrDecay = this.state.adsr[1],
+       adsrSustain = this.state.adsr[2],
+       adsrRelease = this.state.adsr[3],
+       wavvy = this.state.waveType[this.state.currentWave],
+       shifted = event.shiftKey, 
+       eKey = event.key.toString().toLowerCase(),
+       now = context.currentTime,
+       moveType = eType ? 'add' : 'remove',
+       playType = eType ? 'start' : 'stop';
+
+
+
       notes.forEach((note,i) => {
         let notePosition = 12; // - Points to middle C on the keyboard aka unshifted Z
 
@@ -144,11 +156,12 @@ export default class SynthView extends Component {
             if(shifted) {
               notePosition = note.eventIndex[0];
               document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
-              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[this.state.currentWave]);
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave]);  
             } else {
               notePosition = note.eventIndex[1];
               document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
-              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[this.state.currentWave]);
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave]);
+  
             }
           break;
 
@@ -156,18 +169,21 @@ export default class SynthView extends Component {
             if(shifted) {
               notePosition = note.eventIndex[3];
               document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
-              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[this.state.currentWave]);
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave]);
+            
             } else {
               notePosition = note.eventIndex[2];
               document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
-              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[this.state.currentWave]);
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave]);
+     
             }
           break;
           case note.kCode[2] :
             if(shifted) {
               notePosition = note.eventIndex[3];
               document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
-              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[this.state.currentWave]);
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave]);
+          
             } 
         }
       })
@@ -324,7 +340,7 @@ export default class SynthView extends Component {
               {
                 this.state.pianoKeys.map((pK,i)=> {
                   let octaveNum = i%12;
-             
+
 
                   if(!blackKeyOrder.includes(octaveNum)) {
                     return pK
