@@ -86,7 +86,7 @@ export default class SynthView extends Component {
       pianoKeys: [],
       activeSynth: [],
       adsr: [
-            0.5, // Attack
+            0.01, // Attack
             0.1, // Decay
             1,   // Sustain
             0.5  // Release
@@ -112,108 +112,68 @@ export default class SynthView extends Component {
 
   
   }
-  soundOn() {
-    document.querySelector('body').addEventListener('keydown', (event) => {
+
+  /*
+
+    Will condense soundOn() and soundOff() into one function
+
+
+  */
+
+  soundGen(eType) {
+    let eventList = eType ? 'keydown' : 'keyup';
+
+    document.querySelector('body').addEventListener(eventList, (event) => {
       if(!event.metaKey) {
         event.preventDefault();
       }
       let synth = this.state.activeSynth;
-      let shifted =event.shiftKey; 
+      let shifted = event.shiftKey; 
       let eKey = event.key.toString().toLowerCase();
-      let now = context.currentTime; 
-
+      let now = context.currentTime;
+      let moveType = eType ? 'add' : 'remove';
+      let playType = eType ? 'start' : 'stop';
       notes.forEach((note,i) => {
-        let notePosition = 12; // Default will be middle C. 
-        let midOvertone, lowerOvertone = null; // Debating to use this or not
-
-
-        /*
-          This can probably be
-        
-        */
-
+        let notePosition = 12; // - Points to middle C on the keyboard aka unshifted Z
 
         switch(eKey) {
           case note.kCode[0] :
             if(shifted) {
               notePosition = note.eventIndex[0];
-              document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now, this.state.adsr[1])
+              document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[3]);
             } else {
               notePosition = note.eventIndex[1];
-              document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now, this.state.adsr[1])
+              document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[3]);
             }
-            break;
-          case note.kCode[1] :
-            if(shifted) {
-              notePosition = note.eventIndex[3];
-              document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now, this.state.adsr[1])
-            } else {
-              notePosition = note.eventIndex[2];
-              document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now, this.state.adsr[1])
-            }
-            break;  
-          case note.kCode[2] :
-            if(shifted) {
-              notePosition = note.eventIndex[3];
-              document.querySelector('.key_'+notePosition).classList.add('activeKey');
-              synth[notePosition].start(this.state.volume, now, this.state.adsr[1])
-            } 
-            break;                       
-        }
-      })
-    })
-  }
-  soundOff() {
-    document.querySelector('body').addEventListener('keyup', (event) => {
-      if(!event.metaKey) {
-        event.preventDefault();
-      }
-      let synth = this.state.activeSynth;
-      let shifted =event.shiftKey; 
-      let eKey = event.key.toString().toLowerCase();
-      let now = context.currentTime; 
-      notes.forEach((note,i) => {
-        let notePosition = 12; // Default will be middle C. 
-        let midOvertone, lowerOvertone = null;
+          break;
 
-        switch(eKey) {
-          case note.kCode[0] :
-            if(shifted) {
-              notePosition = note.eventIndex[0];
-              document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(0, now, this.state.adsr[3]);
-            } else {
-              notePosition = note.eventIndex[1];
-              document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(0, now, this.state.adsr[3]);
-            }
-            break;
           case note.kCode[1] :
             if(shifted) {
               notePosition = note.eventIndex[3];
-              document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(0, now, this.state.adsr[3]);
+              document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[3]);
             } else {
               notePosition = note.eventIndex[2];
-              document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(0, now, this.state.adsr[3]);
+              document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[3]);
             }
-            break;  
+          break;
           case note.kCode[2] :
             if(shifted) {
               notePosition = note.eventIndex[3];
-              document.querySelector('.key_'+notePosition).classList.remove('activeKey');
-              synth[notePosition].stop(0, now, this.state.adsr[3]);
+              document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[1], this.state.waveType[3]);
             } 
-            break;                       
         }
       })
     })
+
+
   }
+
+
 
 
   componentWillMount() {
@@ -221,8 +181,9 @@ export default class SynthView extends Component {
 
   }
   componentDidMount() {
-    this.soundOn();
-    this.soundOff();
+
+    this.soundGen(true);
+    this.soundGen(false);
   }
 
   changeVol(volVal) {
