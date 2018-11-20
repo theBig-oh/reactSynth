@@ -2,6 +2,7 @@ import React, { Component }  from 'react';
 import MakeSound from '../../Tools/MakeSound';
 import context from '../../Tools/audioContext';
 import Synth from '../../Tools/Synth'; 
+import ConsoleDisplay from '../ConsoleDisplay/ConsoleDisplay';
 //              z  s  x  d  c  v  g  b  h   n  j
 const keycodes = [90,83,88,68,67,86,71,66,72,78,74,77];
 
@@ -218,11 +219,20 @@ export default class SynthView extends Component {
     })
   }
   render() {
-    let blackKeys = [];
-    let whiteKeys = [];
-    const numOfKeys = this.state.numberOfKeys;
-    const blackKeyOrder = [1,3,6,8,10];
-    const numOfFans = Array(6).fill(null);
+    let blackKeys = [],
+        whiteKeys = [];
+    const numOfKeys = this.state.numberOfKeys,
+          blackKeyOrder = [1,3,6,8,10],
+          numOfFans = Array(12).fill(null),
+          ADSR = [
+                  this.state.adsr[0],
+                  this.state.adsr[1],
+                  this.state.adsr[2],
+                  this.state.adsr[3],
+                ],
+          masterVol = this.state.volume;
+          
+    
     numOfKeys.map((pianoKey, i) => {
       let octaveNum = i%12;
       let whiteOrBlackKey = 'whiteKeys';
@@ -302,7 +312,20 @@ export default class SynthView extends Component {
                 </div>
               </div>
               <div className='midSide consolePart'>
-                  <div className='consoleDisplay standIn'> </div>
+                  <div className='consoleDisplay_container'> 
+                      <ConsoleDisplay adsrVals={ADSR} masterVol={masterVol} />
+                  </div>
+                  <div className='adsr_console_container'> 
+                      {
+                        ADSR.map((asdr, i) => {
+                          return (
+                              <div key={`adsr_container_key_`+i} className={`asdr_knob_container asdr_knob_${i}`} > 
+
+                              </div>
+                            )
+                        })
+                      }
+                  </div>
               </div>
               <div className='rightSide consolePart'>
 
