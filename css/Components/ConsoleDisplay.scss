@@ -13,6 +13,13 @@
   align-items: center;
   background: $grayGBDark;
   font-family: $pixelFont;
+
+
+-webkit-box-shadow: inset -94px 4px 144px -55px rgba(0,0,0,0.7);
+-moz-box-shadow: inset -94px 4px 144px -55px rgba(0,0,0,0.7);
+box-shadow: inset -94px 4px 144px -55px rgba(0,0,0,0.7);
+
+  
   .console_display_innerContainer {
     border: 5px none;
     width: 80%;

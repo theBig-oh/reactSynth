@@ -78,7 +78,7 @@
       display: flex;
       justify-content: center;
       > div {
-        border: 1px solid black;
+        border: 1px none;
         display: flex;
       }
       .leftSide, .rightSide {
@@ -165,7 +165,6 @@
         flex-direction: row;
         flex-wrap: wrap;
         > div {
-          border: 5px solid white;
           width: 100%;
         }
 
@@ -173,6 +172,12 @@
           display: flex;
           justify-content: center;
           align-items: center;
+
+
+
+
+
+
         }
       }
     }
