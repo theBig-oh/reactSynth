@@ -12,6 +12,7 @@
   justify-content: center;
   align-items: center;
   background: $grayGBDark;
+  font-family: $pixelFont;
   .console_display_innerContainer {
     border: 5px none;
     width: 80%;
@@ -31,8 +32,27 @@
     .adsr_value_display {
       height: 40%;
       color: white;
-      justify-content: space-between;
+      flex-direction: row;
+      border-top: 10px solid  $greenGBDark;
 
+      .console_adsr {
+        border: 1px none;
+        width: calc(100% / 4);
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        .console_adsr_display_title {
+          border-bottom: 1px solid $greenGBDark;
+          width: 80%;
+          height: 42%;
+        }
+        .console_adsr_display_value {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
     }
   }
 }
