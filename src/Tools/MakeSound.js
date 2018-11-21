@@ -79,27 +79,28 @@ export default class MakeSound {
   */
 
 
-  start(volSet, time, atkVal, decayVal,susVal, releaseVal, waveType) {
+  start(volSet, time, atkVal, decayVal,susVal, releaseVal, waveType, repeat) {
     console.log(this.oscBank);
     const tones = this.overtoneCount;
     const volRatio = [1,0.5,0.33,0.25,0.10];
     console.log(volSet);
     tones.map((oscii,i) => {
-      this.oscBank[i].gain.gain.linearRampToValueAtTime((volSet * volRatio[i]).toFixed(tones.length + 1), time + atkVal);
-    
-    /*      
-
-      // Was hoping to use this to implement the Decay and Sustain on ADSR. 
-
-      this.oscBank[i].gain.gain.cancelScheduledValues(0, 0);
-      this.oscBank[i].gain.gain.linearRampToValueAtTime((susVal * volRatio[i]).toFixed(tones.length + 1), time + (atkVal + decayVal));
-      
-
-     */
+      let masterOrSus = repeat ? [(susVal * volRatio[i]).toFixed(tones.length + 1), time + decayVal] : [(volSet * volRatio[i]).toFixed(tones.length + 1), time + atkVal]; 
 
 
+/*
+      This works for now. 
+
+      If the event that's being passed is repeated, which returns as true, then it will adjust the volume to the sustain level. 
+
+*/
+
+      this.oscBank[i].gain.gain.linearRampToValueAtTime(masterOrSus[0], masterOrSus[1]);
+      if(repeat) {
+        this.oscBank[i].gain.gain.linearRampToValueAtTime(masterOrSus[0], masterOrSus[1]);
+      }
       this.oscBank[i].osci.type = Array.isArray(waveType) ? waveType[i%waveType.length] : waveType; // Implementation of this will be done later
-      this.startDecay(susVal, time, decayVal, waveType);
+   
     })
   }
   stop(volSet, time, atkVal, decayVal,susVal, releaseVal, waveType) {

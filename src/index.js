@@ -39,8 +39,7 @@ class App extends Component {
 
     return (
         <div className='appContainer divContainer'>
-          sup
-
+  
           <SynthView />
 
         </div>  
