@@ -173,11 +173,30 @@
           justify-content: center;
           align-items: center;
 
+        }
 
-
-
-
-
+        .adsr_console_container {
+          
+          display: flex;
+          color: white;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          > div {
+            width: 23%;
+            
+            height: 60%;
+            
+            .adsr_title {
+              border-bottom: 3px solid white;
+              margin-bottom: 2%;
+              height: 25%;
+            }
+            .adsr_knob {
+              border: 1px solid white;
+              height: 80%;
+            }
+          }
         }
       }
     }

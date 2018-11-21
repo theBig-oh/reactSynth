@@ -97,16 +97,16 @@ export default class SynthView extends Component {
     this.state = { 
       numberOfKeys: Array(48).fill(null),
       waveType: ['sine','square','triangle','sawtooth'],
-      currentWave: 1,
+      currentWave: 3,
       volume: 0.5,
       pianoKeys: [],
       activeSynth: [],
       decaySynth: [],
       adsr: [
-            0.1, // Attack
-            0.5, // Decay
-            0.2,   // Sustain
-            0.75,  // Release
+            0.3, // Attack - Time
+            0.5, // Decay - Time 
+            0.9,   // Sustain - Level 
+            0.75,  // Release - Time
             ],
     }
 

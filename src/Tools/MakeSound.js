@@ -84,8 +84,9 @@ export default class MakeSound {
     const tones = this.overtoneCount;
     const volRatio = [1,0.5,0.33,0.25,0.10];
     console.log(volSet);
+    console.log(time + atkVal);
     tones.map((oscii,i) => {
-      let masterOrSus = repeat ? [(susVal * volRatio[i]).toFixed(tones.length + 1), time + decayVal] : [(volSet * volRatio[i]).toFixed(tones.length + 1), time + atkVal]; 
+      let masterOrSus = repeat ? [((volSet*susVal) * volRatio[i]).toFixed(tones.length + 1), time + decayVal] : [(volSet * volRatio[i]).toFixed(tones.length + 1), time + atkVal]; 
 
 
 /*
@@ -98,6 +99,9 @@ export default class MakeSound {
       this.oscBank[i].gain.gain.linearRampToValueAtTime(masterOrSus[0], masterOrSus[1]);
       if(repeat) {
         this.oscBank[i].gain.gain.linearRampToValueAtTime(masterOrSus[0], masterOrSus[1]);
+      }
+      if(time == time + atkVal) {
+        console.log('reached');
       }
       this.oscBank[i].osci.type = Array.isArray(waveType) ? waveType[i%waveType.length] : waveType; // Implementation of this will be done later
    
