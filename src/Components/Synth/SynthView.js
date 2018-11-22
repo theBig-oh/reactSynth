@@ -87,13 +87,15 @@ function ADSRKnob(props) {
   console.log(props);
 
 
+
+
   return (
       <div className='ADSR_knob'>
-          <div className='arrow_left'> 
+          <div className='arrow_left' onClick={()=> {this.props.changeADSR(this.props.ADSRType, 1 )}}> 
 
           </div>
 
-          <div className='arrow_right'>
+          <div className='arrow_right' onClick={()=> {this.props.changeADSR(this.props.ADSRType, 1 )}}>
 
           </div>
       </div>
@@ -341,7 +343,7 @@ export default class SynthView extends Component {
                               <div key={`adsr_container_key_`+i} className={`asdr_knob_container asdr_knob_${i}`} > 
                                 <div className='adsr_title'> {ADSRNames[i]} </div>
                                 <div className='adsr_knob'>
-                                  <ADSRKnob name={ADSRNames[i]} ADSRType={i} ADSRValue={asdr} />
+                                  <ADSRKnob name={ADSRNames[i]} ADSRType={i} ADSRValue={asdr} changeADSR={this.changeADSR}/>
                                 </div>
                               </div>
                             )
