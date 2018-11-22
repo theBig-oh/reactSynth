@@ -83,7 +83,9 @@ function WaveTypeDisplay(props) {
 }
 
 function ADSRKnob(props) {
+  console.log('from ADSRKnob()');
   console.log(props);
+
 
   return (
       <div className='ADSR_knob'>
@@ -117,7 +119,7 @@ export default class SynthView extends Component {
     }
 
     this.changeWave = this.changeWave.bind(this);
-
+    this.changeADSR = this.changeADSR.bind(this);
   }
 
   initializeOscill() {
@@ -139,7 +141,9 @@ export default class SynthView extends Component {
   
   }
 
-
+  changeADSR(adsrType, adsrVal) {
+    console.log(adsrType, adsrVal);
+  }
   soundGen(eType) {
     let eventList = eType ? 'keydown' : 'keyup';
 
