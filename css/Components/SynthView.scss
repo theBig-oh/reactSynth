@@ -195,6 +195,30 @@
             .adsr_knob {
               border: 1px solid white;
               height: 80%;
+
+
+              .ADSR_knob {
+                border: 5px solid red;
+                height: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+
+                > div {
+                  width: 40%;
+                  border: 1px solid green;
+                  height: 50%;
+                }
+                .arrow_left {
+                  background:url(./Assets/arrow_left.png) no-repeat;
+                  background-size: 100% 100%;
+                }
+                .arrow_right {
+                  background:url(./Assets/arrow_right.png) no-repeat;
+                  background-size: 100% 100%;
+                }
+              }
             }
           }
         }

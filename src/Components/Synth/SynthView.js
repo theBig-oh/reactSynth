@@ -87,7 +87,13 @@ function ADSRKnob(props) {
 
   return (
       <div className='ADSR_knob'>
+          <div className='arrow_left'> 
 
+          </div>
+
+          <div className='arrow_right'>
+
+          </div>
       </div>
   )
 }
