@@ -2,6 +2,7 @@ import React, { Component }  from 'react';
 import MakeSound from '../../Tools/MakeSound';
 import context from '../../Tools/audioContext';
 import Synth from '../../Tools/Synth'; 
+import ConsoleDisplay from '../ConsoleDisplay/ConsoleDisplay';
 //              z  s  x  d  c  v  g  b  h   n  j
 const keycodes = [90,83,88,68,67,86,71,66,72,78,74,77];
 
@@ -81,28 +82,46 @@ function WaveTypeDisplay(props) {
   return <div className={`waveChoice ${props.waveNum} ${props.waveName} ${props.selectWave}`} onClick={()=> {props.changeWav(props.waveNum)}}> {props.waveName} </div>
 }
 
+function ADSRKnob(props) {
+  console.log('from ADSRKnob()');
+  console.log(props);
 
+
+
+
+  return (
+      <div className='ADSR_knob'>
+          <div className='arrow_left' onClick={()=> {props.changeADSR(props.ADSRType, false )}}> 
+
+          </div>
+
+          <div className='arrow_right' onClick={()=> {props.changeADSR(props.ADSRType, true )}}>
+
+          </div>
+      </div>
+  )
+}
 export default class SynthView extends Component {
   constructor() {
     super() 
     this.state = { 
       numberOfKeys: Array(48).fill(null),
       waveType: ['sine','square','triangle','sawtooth'],
-      currentWave: 1,
+      currentWave: 3,
       volume: 0.5,
       pianoKeys: [],
       activeSynth: [],
       decaySynth: [],
       adsr: [
-            0.1, // Attack
-            0.5, // Decay
-            0.2,   // Sustain
-            0.75,  // Release
+            0.3, // Attack - Time
+            0.5, // Decay - Time 
+            0.9,   // Sustain - Level 
+            0.75,  // Release - Time
             ],
     }
 
     this.changeWave = this.changeWave.bind(this);
-
+    this.changeADSR = this.changeADSR.bind(this);
   }
 
   initializeOscill() {
@@ -124,7 +143,25 @@ export default class SynthView extends Component {
   
   }
 
+  changeADSR(adsrType, adsrDirect) {
+    console.log('from changeADSR()');
+    console.log(adsrType, adsrDirect);
 
+/*    let currentADSRType = adsrDirect ? (this.state.adsr[adsrType] + 0.05).toFixed(2) : (this.state.adsr[adsrType] - 0.05).toFixed(2);
+*/    
+
+    const currentADSR = this.state.adsr;
+
+    if((currentADSR[adsrType] == 0 && !adsrDirect) || (currentADSR[adsrType] == 1 && adsrDirect)) {
+      console.log('will not modify');
+    } else {
+          currentADSR[adsrType] = adsrDirect ? parseFloat((this.state.adsr[adsrType] + 0.05).toFixed(2)) : parseFloat((this.state.adsr[adsrType] - 0.05).toFixed(2));
+   }
+    this.setState({
+      adsr: currentADSR
+    })
+
+  }
   soundGen(eType) {
     let eventList = eType ? 'keydown' : 'keyup';
 
@@ -144,8 +181,8 @@ export default class SynthView extends Component {
        eKey = event.key.toString().toLowerCase(),
        now = context.currentTime,
        moveType = eType ? 'add' : 'remove',
-       playType = eType ? 'start' : 'stop';
-
+       playType = eType ? 'start' : 'stop',
+       repeated = event.repeat ? true : false;
 
 
       notes.forEach((note,i) => {
@@ -156,11 +193,11 @@ export default class SynthView extends Component {
             if(shifted) {
               notePosition = note.eventIndex[0];
               document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
-              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave]);  
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave], repeated);  
             } else {
               notePosition = note.eventIndex[1];
               document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
-              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave]);
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave], repeated);
   
             }
           break;
@@ -169,12 +206,12 @@ export default class SynthView extends Component {
             if(shifted) {
               notePosition = note.eventIndex[3];
               document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
-              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave]);
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave], repeated);
             
             } else {
               notePosition = note.eventIndex[2];
               document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
-              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave]);
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave], repeated);
      
             }
           break;
@@ -182,7 +219,7 @@ export default class SynthView extends Component {
             if(shifted) {
               notePosition = note.eventIndex[3];
               document.querySelector('.key_'+notePosition).classList[moveType]('activeKey');
-              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave]);
+              synth[notePosition][playType](this.state.volume, now, this.state.adsr[0], this.state.adsr[1], this.state.adsr[2], this.state.adsr[3], this.state.waveType[this.state.currentWave], repeated);
           
             } 
         }
@@ -218,11 +255,22 @@ export default class SynthView extends Component {
     })
   }
   render() {
-    let blackKeys = [];
-    let whiteKeys = [];
-    const numOfKeys = this.state.numberOfKeys;
-    const blackKeyOrder = [1,3,6,8,10];
-    const numOfFans = Array(6).fill(null);
+    let blackKeys = [],
+        whiteKeys = [],
+        totalKeys = [];
+    const numOfKeys = this.state.numberOfKeys,
+          blackKeyOrder = [1,3,6,8,10],
+          numOfFans = Array(12).fill(null),
+          ADSRNames = ['attack','decay','sustain','release'],
+          ADSR = [
+                  this.state.adsr[0],
+                  this.state.adsr[1],
+                  this.state.adsr[2],
+                  this.state.adsr[3],
+                ],
+          masterVol = this.state.volume;
+          
+    
     numOfKeys.map((pianoKey, i) => {
       let octaveNum = i%12;
       let whiteOrBlackKey = 'whiteKeys';
@@ -249,7 +297,7 @@ export default class SynthView extends Component {
        }
        let pKey = <PianoKey key={'renderPiano_'+i} shiftRequired={needShift} keyNum={i} keyType={whiteOrBlackKey} triggerCode={noteTrigger} note={noteName} />;
        
-        this.state.pianoKeys.push(pKey);
+        totalKeys.push(pKey);
     })
 
 
@@ -284,8 +332,11 @@ export default class SynthView extends Component {
            </div>
             <div className='consoleControls'>
               <div className='leftSide consolePart'>
-                <div className='volume_control'>
-                  <input type='range'className='vol_slide' max={100} min={0} onChange={(e)=>{this.changeVol(e.target.value)}}/> 
+                <div className='volume_selector'> 
+                  <div className='volume_title'> Master Volume </div>
+                  <div className='volume_control'>
+                    <input type='range'className='vol_slide' max={100} min={0} onChange={(e)=>{this.changeVol(e.target.value)}}/> 
+                  </div>
                 </div>
                 <div className='wave_selector'> 
                   {
@@ -302,7 +353,23 @@ export default class SynthView extends Component {
                 </div>
               </div>
               <div className='midSide consolePart'>
-                  <div className='consoleDisplay standIn'> </div>
+                  <div className='consoleDisplay_container'> 
+                      <ConsoleDisplay adsrVals={ADSR} masterVol={masterVol} />
+                  </div>
+                  <div className='adsr_console_container'> 
+                      {
+                        ADSR.map((asdr, i) => {
+                          return (
+                              <div key={`adsr_container_key_`+i} className={`asdr_knob_container asdr_knob_${i}`} > 
+                                <div className='adsr_title'> {ADSRNames[i]} </div>
+                                <div className='adsr_knob'>
+                                  <ADSRKnob name={ADSRNames[i]} ADSRType={i} ADSRValue={asdr} changeADSR={this.changeADSR}/>
+                                </div>
+                              </div>
+                            )
+                        })
+                      }
+                  </div>
               </div>
               <div className='rightSide consolePart'>
 
@@ -338,7 +405,7 @@ export default class SynthView extends Component {
           <div className='synthKeys'>
             <div className='whiteKeyRow'>
               {
-                this.state.pianoKeys.map((pK,i)=> {
+                totalKeys.map((pK,i)=> {
                   let octaveNum = i%12;
 
 
@@ -354,7 +421,7 @@ export default class SynthView extends Component {
             <div className='blackKeyRow'>
               {
 
-                this.state.pianoKeys.map((pK,i)=> {
+                totalKeys.map((pK,i)=> {
                   let octaveNum = i%12;
                   
 

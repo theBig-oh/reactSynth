@@ -1,0 +1,8 @@
+/*
+
+  Will develop later. 
+
+  Want to develop the console as its own seperate component aside from the synthView
+
+
+*/
