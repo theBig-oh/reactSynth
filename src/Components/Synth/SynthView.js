@@ -91,11 +91,11 @@ function ADSRKnob(props) {
 
   return (
       <div className='ADSR_knob'>
-          <div className='arrow_left' onClick={()=> {this.props.changeADSR(this.props.ADSRType, 1 )}}> 
+          <div className='arrow_left' onClick={()=> {props.changeADSR(props.ADSRType, false )}}> 
 
           </div>
 
-          <div className='arrow_right' onClick={()=> {this.props.changeADSR(this.props.ADSRType, 1 )}}>
+          <div className='arrow_right' onClick={()=> {props.changeADSR(props.ADSRType, true )}}>
 
           </div>
       </div>
@@ -143,8 +143,24 @@ export default class SynthView extends Component {
   
   }
 
-  changeADSR(adsrType, adsrVal) {
-    console.log(adsrType, adsrVal);
+  changeADSR(adsrType, adsrDirect) {
+    console.log('from changeADSR()');
+    console.log(adsrType, adsrDirect);
+
+/*    let currentADSRType = adsrDirect ? (this.state.adsr[adsrType] + 0.05).toFixed(2) : (this.state.adsr[adsrType] - 0.05).toFixed(2);
+*/    
+
+    const currentADSR = this.state.adsr;
+
+    if((currentADSR[adsrType] == 0 && !adsrDirect) || (currentADSR[adsrType] == 1 && adsrDirect)) {
+      console.log('will not modify');
+    } else {
+          currentADSR[adsrType] = adsrDirect ? parseFloat((this.state.adsr[adsrType] + 0.05).toFixed(2)) : parseFloat((this.state.adsr[adsrType] - 0.05).toFixed(2));
+   }
+    this.setState({
+      adsr: currentADSR
+    })
+
   }
   soundGen(eType) {
     let eventList = eType ? 'keydown' : 'keyup';
