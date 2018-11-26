@@ -92,20 +92,34 @@
 
 
 
+        .volume_selector {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
 
-        .volume_control {
-          border: 1px none;
-          border-radius: 10px;
-          width: 80%; 
-          height: 7%;
-         
+          .volume_title {
+            border-bottom: 2px solid white;
+            color: white;
+            margin-bottom: 8%;
+          }
 
-          /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f7f7f7+0,db5557+100&0+42,1+99 */
-          background: -moz-linear-gradient(left, rgba(247,247,247,0) 0%, rgba(235,179,180,0) 42%, rgba(219,87,89,1) 99%, rgba(219,85,87,1) 100%); /* FF3.6-15 */
-          background: -webkit-linear-gradient(left, rgba(247,247,247,0) 0%,rgba(235,179,180,0) 42%,rgba(219,87,89,1) 99%,rgba(219,85,87,1) 100%); /* Chrome10-25,Safari5.1-6 */
-          background: linear-gradient(to right, rgba(247,247,247,0) 0%,rgba(235,179,180,0) 42%,rgba(219,87,89,1) 99%,rgba(219,85,87,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00f7f7f7', endColorstr='#db5557',GradientType=1 ); /* IE6-9 */
-         }
+          .volume_control {
+            border: 1px none;
+            border-radius: 10px;
+            width: 100%; 
+            height: 7%;
+           
+
+            /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f7f7f7+0,db5557+100&0+42,1+99 */
+            background: -moz-linear-gradient(left, rgba(247,247,247,0) 0%, rgba(235,179,180,0) 42%, rgba(219,87,89,1) 99%, rgba(219,85,87,1) 100%); /* FF3.6-15 */
+            background: -webkit-linear-gradient(left, rgba(247,247,247,0) 0%,rgba(235,179,180,0) 42%,rgba(219,87,89,1) 99%,rgba(219,85,87,1) 100%); /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(to right, rgba(247,247,247,0) 0%,rgba(235,179,180,0) 42%,rgba(219,87,89,1) 99%,rgba(219,85,87,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00f7f7f7', endColorstr='#db5557',GradientType=1 ); /* IE6-9 */
+           
+
+
+          }          
+        }
 
          .wave_selector {
           width: 100%;
@@ -193,12 +207,12 @@
               height: 25%;
             }
             .adsr_knob {
-              border: 1px solid white;
+
               height: 80%;
 
 
               .ADSR_knob {
-                border: 5px solid red;
+
                 height: 100%;
                 display: flex;
                 flex-direction: row;
@@ -207,8 +221,13 @@
 
                 > div {
                   width: 40%;
-                  border: 1px solid green;
+
                   height: 50%;
+
+                  &:hover {
+                    cursor: pointer;
+
+                  }
                 }
                 .arrow_left {
                   background:url(./Assets/arrow_left.png) no-repeat;

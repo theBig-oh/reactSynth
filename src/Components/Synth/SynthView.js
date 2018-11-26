@@ -256,7 +256,8 @@ export default class SynthView extends Component {
   }
   render() {
     let blackKeys = [],
-        whiteKeys = [];
+        whiteKeys = [],
+        totalKeys = [];
     const numOfKeys = this.state.numberOfKeys,
           blackKeyOrder = [1,3,6,8,10],
           numOfFans = Array(12).fill(null),
@@ -296,7 +297,7 @@ export default class SynthView extends Component {
        }
        let pKey = <PianoKey key={'renderPiano_'+i} shiftRequired={needShift} keyNum={i} keyType={whiteOrBlackKey} triggerCode={noteTrigger} note={noteName} />;
        
-        this.state.pianoKeys.push(pKey);
+        totalKeys.push(pKey);
     })
 
 
@@ -331,8 +332,11 @@ export default class SynthView extends Component {
            </div>
             <div className='consoleControls'>
               <div className='leftSide consolePart'>
-                <div className='volume_control'>
-                  <input type='range'className='vol_slide' max={100} min={0} onChange={(e)=>{this.changeVol(e.target.value)}}/> 
+                <div className='volume_selector'> 
+                  <div className='volume_title'> Master Volume </div>
+                  <div className='volume_control'>
+                    <input type='range'className='vol_slide' max={100} min={0} onChange={(e)=>{this.changeVol(e.target.value)}}/> 
+                  </div>
                 </div>
                 <div className='wave_selector'> 
                   {
@@ -401,7 +405,7 @@ export default class SynthView extends Component {
           <div className='synthKeys'>
             <div className='whiteKeyRow'>
               {
-                this.state.pianoKeys.map((pK,i)=> {
+                totalKeys.map((pK,i)=> {
                   let octaveNum = i%12;
 
 
@@ -417,7 +421,7 @@ export default class SynthView extends Component {
             <div className='blackKeyRow'>
               {
 
-                this.state.pianoKeys.map((pK,i)=> {
+                totalKeys.map((pK,i)=> {
                   let octaveNum = i%12;
                   
 
