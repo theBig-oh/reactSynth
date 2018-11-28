@@ -18,9 +18,9 @@ Made to be used with an actual computer or laptop keyboard.
 
 The piano keys are binded to your keyboard. 
 
-     Keyboard  keys            =    Music notes
- 7 8   0 - +  /  A S   F G H   =  C# D#   F# G# A#
-Y U I O P [ ] / Z X C V B N M  = C  D  E F  G  A  B
+         Keyboard  keys            =    Music notes
+     7 8   0 - +  /  A S   F G H   =  C# D#   F# G# A#
+    Y U I O P [ ] / Z X C V B N M  = C  D  E F  G  A  B
 
 
 You can also go an octave higher or lower using the shift + one of the keys above
