@@ -1,4 +1,4 @@
-###React Synthesizer
+### React Synthesizer
 
   
 ***Still in development***
@@ -12,7 +12,7 @@ Made to be used with an actual computer or laptop keyboard.
 ***Mobile version in development***
 
 
-##How To Use
+## How To Use
 
 --- Making music
 
